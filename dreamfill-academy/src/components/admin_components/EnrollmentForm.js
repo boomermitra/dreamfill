@@ -8,7 +8,7 @@ const EnrollmentForm = () => {
   const [email, setEmail] = useState('');
   const [batch, setBatch] = useState('');
   const [level, setLevel] = useState('');
-  const [userId, setuserId] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
@@ -32,7 +32,7 @@ const EnrollmentForm = () => {
         setEmail('');
         setBatch('');
         setLevel('');
-        setuserId('');
+        setUserId('');
         setPassword('');
       })
       .catch((error) => {
@@ -43,15 +43,19 @@ const EnrollmentForm = () => {
 
   const generateUserIDAndPassword = () => {
     // Generate userID based on name and mobile number
-    const firstName = name.split(' ')[0];
-    const mobileDigits = mobileNumber.slice(0, 4);
-    const generatedUserID = `${firstName}${mobileDigits}`;
-    setuserId(generatedUserID);
+    if (name && mobileNumber) {
+      const firstName = name.split(' ')[0];
+      const mobileDigits = mobileNumber.slice(-4);
+      const generatedUserID = `${firstName}${mobileDigits}`;
+      setUserId(generatedUserID);
 
-    // Generate random 4-digit password
-    const generatedPassword =
-      firstName.slice(0, 3) + Math.floor(Math.random() * 10000);
-    setPassword(generatedPassword);
+      // Generate random 4-digit password
+      const generatedPassword =
+        firstName.slice(0, 3) + Math.floor(1000 + Math.random() * 9000);
+      setPassword(generatedPassword);
+    } else {
+      alert('Please enter name and mobile number to generate username and password.');
+    }
   };
 
   return (
@@ -59,9 +63,6 @@ const EnrollmentForm = () => {
       <h2>Enroll A Student</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group as={Row} className="mb-3" controlId="formHorizontalName">
-          <Form.Label column sm={2}>
-            Name
-          </Form.Label>
           <Col sm={5}>
             <Form.Control
               type="text"
@@ -73,14 +74,7 @@ const EnrollmentForm = () => {
           </Col>
         </Form.Group>
 
-        <Form.Group
-          as={Row}
-          className="mb-3"
-          controlId="formHorizontalEmail"
-        >
-          <Form.Label column sm={2}>
-            Email
-          </Form.Label>
+        <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
           <Col sm={5}>
             <Form.Control
               type="email"
@@ -92,14 +86,7 @@ const EnrollmentForm = () => {
           </Col>
         </Form.Group>
 
-        <Form.Group
-          as={Row}
-          className="mb-3"
-          controlId="formHorizontalMobile"
-        >
-          <Form.Label column sm={2}>
-            Mobile
-          </Form.Label>
+        <Form.Group as={Row} className="mb-3" controlId="formHorizontalMobile">
           <Col sm={5}>
             <Form.Control
               type="text"
@@ -112,9 +99,6 @@ const EnrollmentForm = () => {
         </Form.Group>
 
         <Form.Group as={Row} className="mb-3" controlId="formHorizontalBatch">
-          <Form.Label column sm={2}>
-            Batch
-          </Form.Label>
           <Col sm={5}>
             <Form.Control
               type="text"
@@ -127,9 +111,6 @@ const EnrollmentForm = () => {
         </Form.Group>
 
         <Form.Group as={Row} className="mb-3" controlId="formHorizontalLevel">
-          <Form.Label column sm={2}>
-            Level
-          </Form.Label>
           <Col sm={5}>
             <Form.Control
               type="text"
@@ -141,37 +122,39 @@ const EnrollmentForm = () => {
           </Col>
         </Form.Group>
 
-        {userId === '' && password === '' ? (
-          <Button onClick={generateUserIDAndPassword}>
-            Generate UserID and Password
-          </Button>
-        ) : (
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm={2}>
-              UserID
-            </Form.Label>
-            <Col sm={5}>
-              <Form.Control
-                type="text"
-                required
-                placeholder="userId"
-                value={userId}
-                onChange={(e) => setuserId(e.target.value)}
-              />
-            </Col>
-            <Form.Label column sm={2}>
-              Password
-            </Form.Label>
-            <Col sm={5}>
-              <Form.Control
-                type="text"
-                required
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Col>
-          </Form.Group>
+        <Button onClick={generateUserIDAndPassword} className="mb-3">
+          Generate UserID and Password
+        </Button>
+
+        {userId && password && (
+          <>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                UserID
+              </Form.Label>
+              <Col sm={5}>
+                <Form.Control
+                  type="text"
+                  placeholder="UserID"
+                  value={userId}
+                  readOnly
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                Password
+              </Form.Label>
+              <Col sm={5}>
+                <Form.Control
+                  type="text"
+                  placeholder="Password"
+                  value={password}
+                  readOnly
+                />
+              </Col>
+            </Form.Group>
+          </>
         )}
 
         <Form.Group as={Row} className="mb-3">

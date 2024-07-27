@@ -32,7 +32,9 @@ const Navbar1 = ({ isLoggedIn, username, onLogout, onLogin }) => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#link">About us</Nav.Link>
+            <Nav.Link href="/about">About us</Nav.Link>
+            <Nav.Link href="/courses">Courses</Nav.Link>
+            <Nav.Link href="/contact">Contact</Nav.Link>
           </Nav>
           {isLoggedIn ? (
             <>

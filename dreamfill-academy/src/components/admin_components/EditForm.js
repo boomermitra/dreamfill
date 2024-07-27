@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './Styles/EditForm.css'
 
 const EditForm = ({ student, onClose, onSubmit  }) => {
   const [formData, setFormData] = useState(student);
@@ -27,31 +28,61 @@ const EditForm = ({ student, onClose, onSubmit  }) => {
 
   return (
     <div className="edit-form">
-      <h2>Edit Student</h2>
-      <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Name:</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+          <label htmlFor="name">Name:</label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            value={formData.name || ''}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="form-group">
-          <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={formData.email || ''}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="form-group">
-          <label>Batch:</label>
-          <input type="text" name="batch" value={formData.batch} onChange={handleChange} />
+          <label htmlFor="batch">Batch:</label>
+          <input
+            id="batch"
+            type="text"
+            name="batch"
+            value={formData.batch || ''}
+            onChange={handleChange}
+          />
         </div>
         <div className="form-group">
-          <label>Level:</label>
-          <input type="text" name="level" value={formData.level} onChange={handleChange} />
+          <label htmlFor="level">Level:</label>
+          <input
+            id="level"
+            type="text"
+            name="level"
+            value={formData.level || ''}
+            onChange={handleChange}
+          />
         </div>
         <div className="form-group">
-          <label>Mobile:</label>
-          <input type="number" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} />
+          <label htmlFor="mobileNumber">Mobile:</label>
+          <input
+            id="mobileNumber"
+            type="tel"
+            name="mobileNumber"
+            value={formData.mobileNumber || ''}
+            onChange={handleChange}
+          />
         </div>
         <div className="form-buttons">
           <button type="submit">Submit</button>
-          
         </div>
       </form>
     </div>

@@ -1,0 +1,63 @@
+.search-form {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    
+    }
+  
+  .search-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .search-input {
+    height: 50px;
+    font-size: 14px;
+    background-image: url(https://cdn2.hubspot.net/hubfs/4004166/bioticresearch_website_assets/images/search_icon.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    padding-left: 40px;
+    background-color: #fff;
+    border: 1px solid #000;
+    box-shadow: none;
+    
+}
+  
+/* Edit Student Modal */
+.edit-student-modal .modal-content {
+  background-color: #fff;
+  color: #000;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 90%;
+  text-align: center;
+  z-index: 1100;
+  overflow-y: auto;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Login Details Modal */
+.login-details-modal .modal-content {
+  background-color: #fff;
+  color: #000;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 90%;
+  text-align: center;
+  z-index: 1100;
+  overflow-y: auto;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+
+
+
+
+  

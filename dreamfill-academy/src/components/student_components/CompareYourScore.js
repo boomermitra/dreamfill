@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { format, parse } from 'date-fns';
-import '../styles/CompareYourScore.css'; // Create a CSS file for custom styles
+import './CompareYourScore.css'; // Create a CSS file for custom styles
 
 const CompareYourScore = () => {
   const [viewOption, setViewOption] = useState('batch');

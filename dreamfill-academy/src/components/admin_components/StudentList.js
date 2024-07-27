@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/StudentList.css'
+import './Styles/StudentList.css'
 import EditForm from './EditForm'; // Import your edit form component
 import { Row, Col, Button, Modal, Container, Form } from 'react-bootstrap';
 
@@ -133,53 +133,54 @@ const StudentList = () => {
         </div>
       ))}
     </Container>
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header>
-          <Modal.Title>Edit Student</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedStudent && <EditForm student={selectedStudent} onClose={handleCloseModal} onSubmit={handleFormSubmit}/>}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
 
-      
-      <Modal show={showLoginDetailsModal} onHide={handleCloseLoginDetailModal}>
-        <Modal.Header>
-          <Modal.Title>Login Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedStudent && (
-            <>
-              <p><strong>User ID:</strong> {selectedStudent.userId}</p>
-              <p><strong>Password:</strong> {selectedStudent.password}</p>
-              {!showNewPasswordInput && (
-                <p><a href="#" onClick={() => setShowNewPasswordInput(true)}>Set New Password</a></p>
-              )}
-              {showNewPasswordInput && (
-                <Form.Group controlId="newPassword">
-                  <Form.Label>New Password:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
-                </Form.Group>
-              )}
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseLoginDetailModal}>Close</Button>
-          {showNewPasswordInput && (
-            <Button variant="primary" onClick={handleSetNewPassword}>Set New Password</Button>
-          )}
-        </Modal.Footer>
-      </Modal>
+
+  <Modal show={showModal} onHide={handleCloseModal} dialogClassName="edit-student-modal" className="full-height-modal">
+  <Modal.Header>
+    <Modal.Title>Edit Student Details</Modal.Title>
+  </Modal.Header>
+ 
+  <Modal.Body>
+    {selectedStudent && <EditForm student={selectedStudent} onClose={handleCloseModal} onSubmit={handleFormSubmit}/>}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+  </Modal.Footer>
+</Modal>
+
+<Modal show={showLoginDetailsModal} onHide={handleCloseLoginDetailModal} dialogClassName="login-details-modal">
+  <Modal.Header>
+    <Modal.Title>Login Details</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {selectedStudent && (
+      <>
+        <p><strong>User ID:</strong> {selectedStudent.userId}</p>
+        <p><strong>Password:</strong> {selectedStudent.password}</p>
+        {!showNewPasswordInput && (
+          <p><a href="#" onClick={() => setShowNewPasswordInput(true)}>Set New Password</a></p>
+        )}
+        {showNewPasswordInput && (
+          <Form.Group controlId="newPassword">
+            <Form.Label>New Password:</Form.Label>
+            <Form.Control
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </Form.Group>
+        )}
+      </>
+    )}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleCloseLoginDetailModal}>Close</Button>
+    {showNewPasswordInput && (
+      <Button variant="primary" onClick={handleSetNewPassword}>Set New Password</Button>
+    )}
+  </Modal.Footer>
+</Modal>
+
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../styles/PointEditForm.css'
+import './Styles/PointEditForm.css';
+
 
 const PointEditForm = ({ student, onClose, fetchPointsData }) => {
   const [editedPoints, setEditedPoints] = useState({ ...student });

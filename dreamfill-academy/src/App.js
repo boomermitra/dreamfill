@@ -4,7 +4,12 @@ import HomePage from './pages/HomePage';
 import AdminPage from './pages/AdminPage';
 import StudentPage from './pages/StudentPage';
 import Navbar1 from './components/Navbar';
+import About from './components/About';
+import Courses from './components/Courses';
+import Contact from './components/Contact';
+
 import axios from 'axios';
+import './App.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,15 +53,18 @@ function App() {
   };
 
   return (
-    <>
+    <div className="App">
       <Navbar1 isLoggedIn={isLoggedIn} username={username} onLogout={handleLogout} onLogin={handleLogin}/>
       {error && <div className="error">{error}</div>}
       <Routes>
         <Route path='/' element={<HomePage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/student' element={<StudentPage />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

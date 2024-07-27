@@ -1,0 +1,52 @@
+.courses {
+  padding: 4rem 0;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.courses .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.courses h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.course-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.course-item {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+}
+
+.course-image {
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.course-item h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.course-item p {
+  font-size: 1rem;
+  color: #555;
+}
