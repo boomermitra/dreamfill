@@ -1,0 +1,266 @@
+import React, { useState, useEffect }from 'react';
+import axios from 'axios';
+import { Container, Button } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { format } from 'date-fns';
+
+const AssignPoints = () => {
+    const [students, setStudents] = useState([]);
+    const [pointsData, setPointsData] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedBatch, setSelectedBatch] = useState('');
+    const [sortingOptions, setSortingOptions] = useState({ batch: null, level: null });
+    
+    
+
+    useEffect(() => {
+      fetchStudents(selectedBatch); // Fetch students based on selected batch
+  }, [selectedBatch, selectedDate]);
+    
+
+  const fetchStudents = async (batch) => {
+    try {
+        const endpoint = (selectedBatch === "") ? 'http://localhost:5000/api/students' : `http://localhost:5000/api/students/batch/${selectedBatch}`;
+
+        const response = await axios.get(endpoint);
+        const studentData = response.data;
+        setStudents(studentData);
+        const initialPointsData = {};
+        studentData.forEach(student => {
+            initialPointsData[student.id] = {
+                appPractice: 0,
+                classwork: 0,
+                homework: 0,
+                oral: 0,
+                mental: 0,
+                worksheet: 0,
+                activity: 0,
+                punctuality: 0,
+                dress: 0,
+                totalPoints: 0
+            };
+        });
+        setPointsData(initialPointsData);
+    } catch (error) {
+        console.error('Error fetching students:', error);
+    }
+};
+
+      const handlePointsChange = (studentId, criterion, value) => {
+        const updatedPointsData = { ...pointsData };
+        const intValue = parseInt(value);
+        updatedPointsData[studentId][criterion] = intValue || 0;
+        updatedPointsData[studentId].totalPoints = calculateTotalPoints(updatedPointsData[studentId]);
+        setPointsData(updatedPointsData);
+      };
+    
+      
+      const handleAssignPoints = async () => {
+        try {
+           // Format the selected date to "DD/MM/YY" format
+        const formattedDate = format(selectedDate, 'dd/MM/yyyy');
+
+            // Prepare the data to be sent to the backend
+            const dataToSend = students.map(student => ({
+                date: formattedDate, // Include the selected date
+                studentId: student.id,
+                ...pointsData[student.id], // Include the student's points data
+                totalPoints: pointsData[student.id].totalPoints
+            }))
+            .filter(studentData => Object.values(studentData).some(value => value !== ""));
+
+            // Log the data to the console
+            console.log('Data to send:', dataToSend);
+    
+            // Submit points data for all students
+            await axios.post('http://localhost:5000/api/spoints', dataToSend );
+            
+            alert('Points assigned successfully!');
+            
+        } catch (error) {
+            console.error('Error assigning points:', error);
+            alert('An error occurred while assigning points.');
+        }
+        
+    };
+
+      const calculateTotalPoints = (studentData) => {
+        const { appPractice, classwork, homework, oral, mental, worksheet, activity, punctuality, dress } = studentData;
+    
+        // Convert each point category to an integer before summing
+        const pointsArray = [appPractice, classwork, homework, oral, mental, worksheet, activity, punctuality, dress];
+    
+        // Check if any of the points data is undefined or NaN
+        const hasUndefinedOrNaN = pointsArray.some(point => point === undefined || isNaN(parseInt(point)));
+    
+        if (hasUndefinedOrNaN) {
+            // Return 0 if any points data is undefined or NaN
+            return 0;
+        }
+    
+        // Calculate total points
+        const totalPoints = pointsArray.reduce((acc, point) => acc + parseInt(point), 0);
+    
+        return totalPoints;
+    };
+
+    // console.log('students: ' , students);
+    // console.log('pointsData: ', pointsData);
+
+    const handleSortByBatch = () => {
+      const newStudents = [...students];
+      newStudents.sort((a, b) => {
+          if (sortingOptions.batch === 'asc') {
+              return a.batch.localeCompare(b.batch);
+          } else {
+              return b.batch.localeCompare(a.batch);
+          }
+      });
+      setStudents(newStudents);
+      setSortingOptions({ ...sortingOptions, batch: sortingOptions.batch === 'asc' ? 'desc' : 'asc' });
+  };
+
+  const handleSortByLevel = () => {
+      const newStudents = [...students];
+      newStudents.sort((a, b) => {
+          if (sortingOptions.level === 'asc') {
+              return a.level.localeCompare(b.level);
+          } else {
+              return b.level.localeCompare(a.level);
+          }
+      });
+      setStudents(newStudents);
+      setSortingOptions({ ...sortingOptions, level: sortingOptions.level === 'asc' ? 'desc' : 'asc' });
+  };
+
+
+  return (
+    <div>
+      <h2>Assign Points</h2>
+      <label>Select Date:</label>
+      <DatePicker selected={selectedDate} onChange={date => setSelectedDate(date)} />
+      <label>Select Batch:</label>
+            <select value={selectedBatch} onChange={(e) => setSelectedBatch(e.target.value)}>
+                <option value="">All Batches</option>
+                <option value="A">Batch A</option>
+                <option value="B">Batch B</option>
+                <option value="C">Batch C</option>
+            </select>
+      <Container fluid>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Batch
+            <button type="button" data-toggle="button" className="btn btn-light" onClick={handleSortByBatch}>
+                                    {sortingOptions.batch === 'asc' ? <i className="bi bi-sort-up" style={{ fontSize: '1.1rem', color: 'cornflowerblue' }}></i> : <i className="bi bi-sort-down-alt" style={{ fontSize: '1.1rem', color: '#fc3903' }}></i>}
+                                </button></th>
+            <th>Level
+            <button type="button" data-toggle="button" className="btn btn-light" onClick={handleSortByLevel}>
+                                    {sortingOptions.level === 'asc' ? <i className="bi bi-sort-up" style={{ fontSize: '1.1rem', color: 'cornflowerblue' }}></i> : <i className="bi bi-sort-down-alt" style={{ fontSize: '1.1rem', color: '#fc3903' }}></i>}
+                                </button>
+            </th>
+            <th>App Practice</th>
+            <th>Classwork</th>
+            <th>Homework</th>
+            <th>Oral</th>
+            <th>Mental</th>
+            <th>Worksheet</th>
+            <th>Activity</th>
+            <th>Punctuality</th>
+            <th>Dress</th>
+            {/* Add other point categories as needed */}
+            <th>Total Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.map(student => (
+            <tr key={student.id}>
+              <td>{student.name}</td>
+              <td>{student.batch}</td>
+              <td>{student.level}</td>
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.appPractice || ''} maxlength="2" size="2"
+                  onChange={e => handlePointsChange(student.id, 'appPractice', e.target.value) }
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.classwork || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'classwork', e.target.value)}
+                />
+              </td>
+              {/* Add other input fields for point categories */}
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.homework || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'homework', e.target.value)}
+                />
+              </td>
+
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.oral || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'oral', e.target.value)}
+                />
+              </td>
+
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.mental || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'mental', e.target.value)}
+                />
+              </td>
+
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.worksheet || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'worksheet', e.target.value)}
+                />
+              </td>
+
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.activity || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'activity', e.target.value)}
+                />
+              </td>
+
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.punctuality || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'punctuality', e.target.value)}
+                />
+              </td>
+
+              <td>
+                <input
+                  type="text"
+                  value={pointsData[student.id]?.dress || ''} maxlength="2" size="2" 
+                  onChange={e => handlePointsChange(student.id, 'dress', e.target.value)}
+                />
+              </td>
+
+              <td>{pointsData[student.id]?.totalPoints}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </Container>
+      
+      <button onClick={handleAssignPoints}>Submit</button>
+    </div>
+  )
+}
+
+export default AssignPoints;

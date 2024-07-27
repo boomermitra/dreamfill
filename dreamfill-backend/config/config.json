@@ -1,0 +1,15 @@
+
+{
+    "development": {
+      "username": "ashu",
+      "password": "ashu123",
+      "database": "dreamfill_academy",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    "production": {
+      "use_env_variable": "DATABASE_URL",
+      "dialect": "postgres"
+    }
+  }
+  

@@ -1,0 +1,22 @@
+.rank-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+  
+  .rank-table {
+    margin-top: 10px;
+  }
+  
+  .pagination-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-buttons button {
+    margin: 0 5px;
+  }
+  
